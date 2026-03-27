@@ -11,20 +11,26 @@ function Form({ course, day, lecture, setPage }) {
     if (!course || !day || !lectureNumber) return;
 
     setLoading(true);
-  
-fetch(`http://localhost:5000/timetable?course=${course.toUpperCase()}&day=${day}&lecture=${lectureNumber}`)
+    
+    // Day ka pehla letter hamesha bada rakho (Monday, Tuesday etc.)
+    const formattedDay = day.charAt(0).toUpperCase() + day.slice(1).toLowerCase();
+    const formattedCourse = course.toUpperCase();
+
+    fetch(`http://localhost:5000/timetable?course=${formattedCourse}&day=${formattedDay}&lecture=${lectureNumber}`)
       .then((res) => res.json())
       .then((data) => {
-        // Agar API array bhej rahi hai toh pehla element lo
-        if (data && data.length > 0) {
-          setApiSubject(data[0].subject);
+        // Agar data array hai toh [0] use karein, agar direct object hai toh seedha data use karein
+        if (Array.isArray(data) && data.length > 0) {
+          setApiSubject(data[0].subject || "No Subject in DB");
+        } else if (data && data.subject) {
+          setApiSubject(data.subject);
         } else {
           setApiSubject("Subject Not Found");
         }
         setLoading(false);
       })
       .catch((err) => {
-        console.log("API Error:", err);
+        console.error("API Error:", err);
         setApiSubject("Error Loading Data");
         setLoading(false);
       });
@@ -47,7 +53,6 @@ fetch(`http://localhost:5000/timetable?course=${course.toUpperCase()}&day=${day}
         <div style={styles.day}>{day}</div>
         <div style={styles.lecture}>{lecture}</div>
         <div style={styles.subject}>
-          {/* Ab data sirf API se aayega */}
           {loading ? "Loading..." : apiSubject}
         </div>
         <button style={styles.btn} onClick={() => setPage("Home")}>

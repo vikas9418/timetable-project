@@ -200,7 +200,7 @@ const seedDB = async () => {
   try {
     await Timetable.deleteMany({}); 
     await Timetable.insertMany(timetableData); 
-    console.log("Full Timetable Seeded Successfully! ✅ Total entries:", timetableData.length);
+    console.log("Full Timetable Seeded Successfully! Total entries:", timetableData.length);
     mongoose.connection.close();
   } catch (err) {
     console.log("Seeding Error:", err);
