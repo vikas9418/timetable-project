@@ -4,24 +4,30 @@ function Form({ course, day, lecture, setPage }) {
   const [apiSubject, setApiSubject] = useState("");
   const [loading, setLoading] = useState(true);
 
-  // Safe Lecture Number extraction (e.g., "Lecture 1" -> "1")
+  // 1. Lecture Number extraction (e.g., "Lecture 4" -> "4")
   const lectureNumber = lecture && lecture.includes(" ") ? lecture.split(" ")[1] : lecture;
 
   useEffect(() => {
+    // यहाँ lectureNumber का इस्तेमाल पक्का करें
     if (!course || !day || !lectureNumber) return;
 
     setLoading(true);
     
-    // Day ka pehla letter hamesha bada rakho (Monday, Tuesday etc.)
-    const formattedDay = day.charAt(0).toUpperCase() + day.slice(1).toLowerCase();
-    const formattedCourse = course.toUpperCase();
+    // 2. Formatting (Database se match karne ke liye)
+    const formattedDay = day.charAt(0).toUpperCase() + day.slice(1).toLowerCase(); // "Monday"
+    const formattedCourse = course.toUpperCase(); // "BA"
 
-    fetch(`https://timetable-project-v95e.onrender.com/timetable?course=${formattedCourse}&day=${formattedDay}&lecture=${lecture}`)
+    // 3. Updated URL with fixed variables
+    const url = `https://timetable-project-v95e.onrender.com/timetable?course=${formattedCourse}&day=${formattedDay}&lecture=${lectureNumber}`;
+
+    fetch(url)
       .then((res) => res.json())
       .then((data) => {
-        // Agar data array hai toh [0] use karein, agar direct object hai toh seedha data use karein
+        console.log("Response from DB:", data); // Debugging ke liye
+
         if (Array.isArray(data) && data.length > 0) {
-          setApiSubject(data[0].subject || "No Subject in DB");
+          // MongoDB hamesha array bhejta hai find() use karne par
+          setApiSubject(data[0].subject);
         } else if (data && data.subject) {
           setApiSubject(data.subject);
         } else {
@@ -34,12 +40,12 @@ function Form({ course, day, lecture, setPage }) {
         setApiSubject("Error Loading Data");
         setLoading(false);
       });
-  }, [course, day, lectureNumber]);
+  }, [course, day, lectureNumber]); // dependencies check
 
   const styles = {
     page: { minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center", background: "linear-gradient(135deg,#0c68da,#000000)" },
     card: { background: "white", padding: "40px", borderRadius: "20px", boxShadow: "0 20px 40px rgba(0,0,0,0.3)", textAlign: "center", width: "350px" },
-    title: { marginBottom: "20px", color: "#0c68da" },
+    title: { marginBottom: "20px", color: "#0c68da", textTransform: "capitalize" },
     day: { fontSize: "22px", fontWeight: "600", marginBottom: "10px" },
     lecture: { color: "gray", marginBottom: "20px" },
     subject: { fontSize: "20px", fontWeight: "bold", color: "#0487A1", marginBottom: "30px" },
@@ -53,7 +59,7 @@ function Form({ course, day, lecture, setPage }) {
         <div style={styles.day}>{day}</div>
         <div style={styles.lecture}>{lecture}</div>
         <div style={styles.subject}>
-          {loading ? "Loading..." : apiSubject}
+          {loading ? "Searching..." : apiSubject}
         </div>
         <button style={styles.btn} onClick={() => setPage("Home")}>
           Back
