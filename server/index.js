@@ -40,14 +40,26 @@ app.post("/timetable", async (req, res) => {
 });
 
 // GET API
+// GET API - इसे अपडेट करें
 app.get("/timetable", async (req, res) => {
   try {
-    const { course, day, lecture } = req.query;
+    let { course, day, lecture } = req.query;
+
+   
+    const formattedCourse = course ? course.toUpperCase() : undefined;
+
+    
+    const formattedDay = day ? day.charAt(0).toUpperCase() + day.slice(1).toLowerCase() : undefined;
+
+    
+    const formattedLecture = lecture ? lecture.toString() : undefined;
+
     const data = await Timetable.find({ 
-      course: course ? course.toUpperCase() : undefined, 
-      day, 
-      lecture 
+      course: formattedCourse, 
+      day: formattedDay, 
+      lecture: formattedLecture 
     });
+
     res.json(data);
   } catch (error) {
     res.status(500).json({ error: error.message });
