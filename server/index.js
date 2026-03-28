@@ -14,7 +14,7 @@ app.use(express.json());
 // 3. MongoDB Connection - Ab password '.env' file se aayega
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB Connected Safely ✅"))
+  .then(() => console.log("MongoDB Connected Safely "))
   .catch((err) => console.log("MongoDB Connection Error:", err));
 
 // --- Baki sari APIs waisi hi rahengi ---
@@ -56,7 +56,7 @@ app.put("/timetable", async (req, res) => {
       { new: true }
     );
     if (updatedData) {
-      res.json({ message: "Updated Successfully! ✅", data: updatedData });
+      res.json({ message: "Updated Successfully! ", data: updatedData });
     } else {
       res.status(404).json({ message: "Lecture not found" });
     }
@@ -75,7 +75,7 @@ app.delete("/timetable", async (req, res) => {
       lecture 
     });
     if (deletedData) {
-      res.json({ message: "Deleted Successfully! 🗑️" });
+      res.json({ message: "Deleted Successfully! " });
     } else {
       res.status(404).json({ message: "Lecture not found" });
     }
@@ -85,5 +85,5 @@ app.delete("/timetable", async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server running on port ${port} 🚀`);
+  console.log(`Server running on port ${port} `);
 });
