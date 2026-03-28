@@ -8,4 +8,4 @@ const timetableSchema = new mongoose.Schema({
 });
 
 
-module.exports = mongoose.model("TimetableNewFresh", timetableSchema);
+module.exports = mongoose.model("Timetable", timetableSchema, "timetablenewfreshes");
