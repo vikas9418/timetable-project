@@ -16,7 +16,7 @@ function Form({ course, day, lecture, setPage }) {
     const formattedDay = day.charAt(0).toUpperCase() + day.slice(1).toLowerCase();
     const formattedCourse = course.toUpperCase();
 
-    fetch(`https://timetable-project-v95e.onrender.com?course=${formattedCourse}&day=${formattedDay}&lecture=${lectureNumber}`)
+    fetch(`https://timetable-project-v95e.onrender.com/timetable?course=${formattedCourse}&day=${formattedDay}&lecture=${lecture}`)
       .then((res) => res.json())
       .then((data) => {
         // Agar data array hai toh [0] use karein, agar direct object hai toh seedha data use karein
