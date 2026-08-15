@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "time table project done by hardik, jay, vikas, rohan",
   "license": "ISC",
-  "author": "Jay, Vikas, Hardik, Rohan",
+  "author": "Vikas",
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
