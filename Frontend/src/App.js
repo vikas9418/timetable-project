@@ -11,31 +11,56 @@ import Form from "./Form";
 
 function App() {
 
-  const [page, setPage] = useState(
-    window.history.state?.page || "Home"
-  );
+  const getPageFromURL = () => {
+    const path = window.location.pathname.toLowerCase();
+
+    if (path === "/ba") return "Ba";
+    if (path === "/bba") return "Bba";
+    if (path === "/bca") return "Bca";
+    if (path === "/bvoc") return "Bvoc";
+    if (path === "/cyber") return "Cyber";
+    if (path === "/aiandml") return "Aiandml";
+
+    return "Home";
+  };
+
+
+  const [page, setPage] = useState(getPageFromURL());
+
 
   useEffect(() => {
 
-    if (!window.history.state) {
-      window.history.replaceState(
-        { page: "Home" },
-        "",
-        window.location.href
-      );
-    }
+    const handleBackForward = () => {
 
-    const handleBackForward = (event) => {
+      const path = window.location.pathname.toLowerCase();
 
-      if (event.state?.page) {
-        setPage(event.state.page);
-      } else {
+      if (path === "/ba") {
+        setPage("Ba");
+      }
+      else if (path === "/bba") {
+        setPage("Bba");
+      }
+      else if (path === "/bca") {
+        setPage("Bca");
+      }
+      else if (path === "/bvoc") {
+        setPage("Bvoc");
+      }
+      else if (path === "/cyber") {
+        setPage("Cyber");
+      }
+      else if (path === "/aiandml") {
+        setPage("Aiandml");
+      }
+      else {
         setPage("Home");
       }
 
     };
 
+
     window.addEventListener("popstate", handleBackForward);
+
 
     return () => {
       window.removeEventListener("popstate", handleBackForward);
@@ -48,10 +73,32 @@ function App() {
 
     setPage(newPage);
 
+    let newPath = "/";
+
+    if (newPage === "Ba") {
+      newPath = "/BA";
+    }
+    else if (newPage === "Bba") {
+      newPath = "/BBA";
+    }
+    else if (newPage === "Bca") {
+      newPath = "/BCA";
+    }
+    else if (newPage === "Bvoc") {
+      newPath = "/Bvoc";
+    }
+    else if (newPage === "Cyber") {
+      newPath = "/Cyber";
+    }
+    else if (newPage === "Aiandml") {
+      newPath = "/Aiandml";
+    }
+
+
     window.history.pushState(
       { page: newPage },
       "",
-      window.location.href
+      newPath
     );
 
   };
